@@ -1,0 +1,30 @@
+---
+title: "20181002a Startup assessment"
+author: "cheungngo"
+date: "2 October 2018"
+output: word_document
+---
+
+
+###
+
+
+## Startup assessment
+
+
+### In human genome reference build hg19, what is the length of chromosome 16?
+
+###
+
+```{r packages, message=FALSE}
+library(BSgenome.Hsapiens.UCSC.hg19) 
+```
+
+###
+
+```{r access to the genome}
+
+genome = BSgenome.Hsapiens.UCSC.hg19
+seqlengths(genome)[16]
+```
+

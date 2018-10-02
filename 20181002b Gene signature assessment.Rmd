@@ -1,0 +1,67 @@
+---
+title: "20181002b Gene signature assessment"
+author: "cheungngo"
+date: "2 October 2018"
+output: word_document
+---
+
+
+###
+
+
+## Gene signature assessment
+
+
+### The 70-gene diagnostic signature for breast cancer progression risk
+
+###
+
+```{r the genefu package, eval=FALSE}
+library(BiocInstaller) 
+biocLite("genefu")
+#  "R package providing various functions relevant for gene expression analysis with emphasis on breast cancer"
+```
+
+###
+
+```{r 70 gene signature, message=FALSE}
+library(genefu) 
+data(sig.gene70) 
+dim(sig.gene70) 
+head(sig.gene70)[,1:6]
+```
+
+###
+
+### How many components of the signature have a missing value for the associated NCBI gene symbol?
+
+###
+
+```{r}
+sum(is.na(sig.gene70$NCBI.gene.symbol))
+```
+
+### Kinases in the 70 gene signature
+
+#### You can use grep on the Description field of the sig.gene70 data.frame to search for substrings of long gene names
+#### How many of the members of the 70-gene signature are genes coding for kinases?
+
+###
+
+```{r grep the kinase}
+length(grep('kinase',sig.gene70$Description))
+```
+
+###
+
+### Some exploration in the genefu
+
+###
+
+```{r data in genefu,eval=FALSE}
+data(package = 'genefu')
+```
+
+```{r columns in genefu}
+names(sig.gene70)
+```
