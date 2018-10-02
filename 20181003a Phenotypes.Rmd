@@ -1,0 +1,93 @@
+---
+title: "20181003a Phenotypes"
+author: "cheungngo"
+date: "October 3, 2018"
+output: word_document
+---
+
+###
+
+## Package and data
+
+```{r COPD data, eval=FALSE}
+library(BiocInstaller)
+biocLite('COPDSexualDimorphism.data')
+```
+
+```{r loading the library, message=FALSE}
+library(COPDSexualDimorphism.data)
+data(lgrc.expr.meta)
+# The variable pkyrs in the expr.meta data.frame represents pack years smoked
+# Other variables include gender (self-explanatory) and diagmaj (disease status)
+```
+
+```{r names of dataframe}
+names(expr.meta)
+```
+
+
+###
+
+## What is the number of female participants in this study?:
+
+```{r}
+unique(expr.meta$gender)
+```
+
+```{r}
+sum(expr.meta$gender=='2-Female')
+```
+
+###
+
+## What is the median of the distribution of pack years smoked in this cohort (women and men)?
+
+```{r}
+median(expr.meta$pkyrs)
+```
+
+###
+
+## True or False: The distribution of pack-years smoked is well-approximated by a Gaussian (Normal) probability distribution.
+
+```{r}
+qqnorm(expr.meta$pkyrs)
+# FALSE
+```
+
+###
+
+## Which of the following is an aspect of the display that would suggest caution in using the t test in comparing males and females with respect to pack years smoked?
+
+```{r}
+boxplot(pkyrs~gender, data=expr.meta)
+# plot 01
+# Distributions appear quite asymmetric, with long tails skewed towards high values.
+```
+
+###
+
+## Variable transformation using boxcox
+
+```{r}
+# transform the pkyrs into a positive var for analysis
+expr.meta$pyp1 = expr.meta$pkyrs+1
+```
+
+```{r, message=FALSE}
+library(MASS)
+```
+
+```{r}
+lm1 = lm(pyp1~gender, data=expr.meta)
+bc1 = boxcox(lm1)
+lambda = bc1$x[which(rank(-bc1$y)==1)]
+lambda
+# if lambda is 0.5, we use sqrt(pyp1)
+```
+
+```{r}
+boxplot(I(pyp1^lambda)~gender, data=expr.meta)
+# plot 02
+# the skewness seems disappeared
+```
